@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Product>
+
+<h1>Список позиций в комнате 205</h1>
+
+<div class="row mb-4">
+    <a asp-action="NewProduct" class="btn btn-primary">Новая позиция</a>
+</div>
+<div class="row mb-4">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    Наименование
+                </th>
+                <th>
+                    Описание
+                </th>
+                <th>
+                    Текущее количество
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <a asp-action="EditProduct" asp-route-id="@item.Id">@item.Name</a>
+                    </td>
+                    <td>
+                        @item.Description
+                    </td>
+                    <td>
+                        @item.CurrentCount
+                    </td>
+                    <td>
+                        <a class="btn btn-primary" asp-action="Outcome" asp-route-id="@item.Id">Выдача</a>
+                        <a class="btn btn-primary" asp-action="Income" asp-route-id="@item.Id">Получение</a>
+                        
+                    </td>
+
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

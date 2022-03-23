@@ -1,0 +1,34 @@
+﻿@model Sklad.Models.Product
+
+@{
+    ViewData["Title"] = "Обновить";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditProduct">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" value="@Model.Id" />
+            <input type="hidden" asp-for="Name" value="@Model.Name" />
+            <input type="hidden" asp-for="CurrentCount" value="@Model.CurrentCount" />
+            <div class="form-group">
+                <h1>Описание</h1>
+                <p>@Model.Description</p>
+                <input type="hidden" asp-for="Description" value="@Model.Description"/>
+            </div>
+            <div class="form-group">
+                <label asp-for="CanBeGiven" class="control-label">Готово к выдаче</label>
+                <input asp-for="CanBeGiven" class="custom-checkbox" />
+                <span asp-validation-for="CanBeGiven" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CountToGive" class="control-label">Количество к выдаче</label>
+                <input asp-for="CountToGive" class="form-control" />
+                <span asp-validation-for="CountToGive" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Обновить" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>

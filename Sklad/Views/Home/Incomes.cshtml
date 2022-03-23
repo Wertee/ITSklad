@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Sklad.Models.Income>
+
+@{
+    ViewData["Title"] = "Incomes";
+}
+
+<h1>Приход</h1>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>
+                Наименование
+            </th>
+            <th>
+                Количество
+            </th>
+            <th>
+                Дата
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @item.Product.Description
+            </td>
+            <td>
+                @item.Count
+            </td>
+            <td>
+                @item.Date.ToString("d")
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

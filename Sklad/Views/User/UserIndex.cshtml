@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Product>
+
+@{
+    Layout = "_UserLayout";
+}
+
+<h1>Список позиций для выдачи</h1>
+
+<div class="row mb-4">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    Наименование
+                </th>
+                <th>
+                    Описание
+                </th>
+                <th>
+                    Количество к выдаче
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.Name
+                    </td>
+                    <td>
+                        @item.Description
+                    </td>
+                    <td>
+                        @item.CountToGive
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

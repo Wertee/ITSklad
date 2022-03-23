@@ -1,0 +1,39 @@
+﻿@model IEnumerable<Outcome>
+<h1>Расход</h1>
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>
+            Наименование
+        </th>
+        <th>
+            Количество
+        </th>
+        <th>
+            Кто получил
+        </th>
+        <th>
+            Дата
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @item.Product.Description
+            </td>
+            <td>
+                @item.Count
+            </td>
+            <td>
+                @item.Name
+            </td>
+            <td>
+                @item.Date.ToString("d")
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

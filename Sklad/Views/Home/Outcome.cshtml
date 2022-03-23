@@ -1,0 +1,29 @@
+﻿@model Outcome
+
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Outcome" method="post">
+            <input type="hidden" asp-for="Id" value="0" />
+            <input type="hidden" asp-for="Date" value="@DateTime.Now" />
+            <input type="hidden" asp-for="ProductId" value="@Model.ProductId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label">Получатель:</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Count" class="control-label">Количество</label>
+                <input asp-for="Count" class="form-control" />
+                <span asp-validation-for="Count" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Выдача" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<div>
+    <a asp-action="Index" class="btn btn-primary">Назад к списку</a>
+</div>
