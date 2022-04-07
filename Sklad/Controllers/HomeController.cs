@@ -38,7 +38,7 @@ namespace Sklad.Controllers
             var prod = _context.Products.Find(outcome.ProductId);
             if (outcome.Count == 0)
             {
-                ModelState.AddModelError("","Не введено количество");
+                ModelState.AddModelError("","Необходимо ввести количество");
                 return View(outcome);
             }
             try
