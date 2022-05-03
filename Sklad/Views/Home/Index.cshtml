@@ -18,6 +18,12 @@
                 <th>
                     Текущее количество
                 </th>
+                <th>
+                    Год прихода партии
+                </th>
+                <th>
+                    Выдача/Получение
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -34,12 +40,13 @@
                         @item.CurrentCount
                     </td>
                     <td>
+                        @item.YearOfIncome
+                    </td>
+                    <td>
                         <a class="btn btn-primary" asp-action="Outcome" asp-route-id="@item.Id">Выдача</a>
                         <a class="btn btn-primary" asp-action="Income" asp-route-id="@item.Id">Получение</a>
-                        
+
                     </td>
-
-
                 </tr>
             }
         </tbody>

@@ -13,6 +13,7 @@ namespace Sklad.Models
         public int CurrentCount { get; set; }
         public bool CanBeGiven { get; set; }
         public int CountToGive { get; set; }
+        public int YearOfIncome { get; set; }
 
     }
 }

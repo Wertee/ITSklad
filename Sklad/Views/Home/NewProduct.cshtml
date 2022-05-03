@@ -27,6 +27,10 @@
                 <span asp-validation-for="CurrentCount" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label class="control-label">Год прихода партии</label>
+                @Html.DropDownListFor(model => model.YearOfIncome,ViewBag.Years as SelectList)
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Добавить" class="btn btn-primary" />
             </div>
         </form>

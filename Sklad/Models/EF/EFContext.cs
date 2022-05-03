@@ -2,7 +2,7 @@
 
 namespace Sklad.Models.EF
 {
-    public class EFContext:DbContext
+    public class EFContext : DbContext
     {
         public DbSet<Product> Products { get; set; }
         public DbSet<Income> Incomes { get; set; }
@@ -10,6 +10,7 @@ namespace Sklad.Models.EF
 
         public EFContext(DbContextOptions<EFContext> options) : base(options)
         {
+            //Database.EnsureDeleted();
             Database.EnsureCreated();
         }
     }

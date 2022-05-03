@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Sklad.Infrastructure;
 using Sklad.Models.EF;
@@ -87,7 +88,21 @@ namespace Sklad.Controllers
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
-        public IActionResult NewProduct() => View();
+
+        public IActionResult NewProduct()
+        {
+            List<int> yearsList = new();
+            for (int i = 2015; i <= DateTime.Now.Year; i++)
+            {
+                yearsList.Add(i);
+            }
+
+            SelectList yearSelectList = new SelectList(yearsList);
+            ViewBag.Years = yearSelectList;
+            return View();
+        }
+
+        
         
         [HttpPost]
         public IActionResult NewProduct(Product prod)
@@ -99,7 +114,6 @@ namespace Sklad.Controllers
                 _context.Incomes.Add(new Income() { ProductId = prod.Id, Count = prod.CurrentCount,Date = DateTime.Now});
                 _context.SaveChanges();
             }
-
             return RedirectToAction("Index");
         }
 

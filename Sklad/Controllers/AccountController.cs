@@ -30,7 +30,7 @@ namespace Sklad.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password,false,false);
+                var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, false, false);
                 if (result.Succeeded)
                 {
                     if (!string.IsNullOrEmpty(model.ReturnURL))
@@ -42,7 +42,7 @@ namespace Sklad.Controllers
 
                 }
 
-                ModelState.AddModelError("","Wrong login or password");
+                ModelState.AddModelError("", "Wrong login or password");
             }
 
             return View(model);
@@ -59,7 +59,7 @@ namespace Sklad.Controllers
             var res = await _userManager.CreateAsync(new User() { UserName = "Admin" }, "Fb4a6a22_a");
             if (res.Succeeded)
             {
-                
+
             }
             return RedirectToAction("Login");
         }
