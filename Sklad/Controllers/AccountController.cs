@@ -17,11 +17,11 @@ namespace Sklad.Controllers
             _userManager = user;
             _signInManager = sign;
         }
-        public IActionResult Login(string returnURL)
+        public IActionResult Login()
         {
             if (User.Identity is { IsAuthenticated: true })
                 return RedirectToAction("Index", "Home");
-            return View(new LoginViewModel() { ReturnURL = returnURL });
+            return View(new LoginViewModel());
         }
 
         [HttpPost]
@@ -33,13 +33,7 @@ namespace Sklad.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, false, false);
                 if (result.Succeeded)
                 {
-                    if (!string.IsNullOrEmpty(model.ReturnURL))
-                    {
-                        return Redirect(model.ReturnURL);
-                    }
-
                     return RedirectToAction("Index", "Home");
-
                 }
 
                 ModelState.AddModelError("", "Wrong login or password");

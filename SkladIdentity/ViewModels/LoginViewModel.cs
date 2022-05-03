@@ -5,15 +5,13 @@ namespace SkladIdentity.ViewModels
 {
     public class LoginViewModel
     {
-        [Required] 
+        [Required]
         [Display(Name = "Имя пользователя")]
         public string UserName { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
-
-        public string ReturnURL { get; set; }
 
     }
 }
