@@ -14,6 +14,5 @@ namespace Sklad.Models
         public bool CanBeGiven { get; set; }
         public int CountToGive { get; set; }
         public int YearOfIncome { get; set; }
-
     }
 }

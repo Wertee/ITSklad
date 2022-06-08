@@ -91,28 +91,28 @@ namespace Sklad.Controllers
 
         public IActionResult NewProduct()
         {
-            List<int> yearsList = new();
-            for (int i = 2015; i <= DateTime.Now.Year; i++)
-            {
-                yearsList.Add(i);
-            }
-
+            var yearsList = GetIncomeYears.GetYears();
             SelectList yearSelectList = new SelectList(yearsList);
             ViewBag.Years = yearSelectList;
             return View();
         }
-
-        
-        
         [HttpPost]
         public IActionResult NewProduct(Product prod)
         {
-            if (prod != null)
+            if (prod != null && prod.CurrentCount>0)
             {
                 _context.Products.Add(prod);
                 _context.SaveChanges();
                 _context.Incomes.Add(new Income() { ProductId = prod.Id, Count = prod.CurrentCount,Date = DateTime.Now});
                 _context.SaveChanges();
+            }
+            else
+            {
+                ModelState.AddModelError("", "Введите корректное количество");
+                var yearsList = GetIncomeYears.GetYears();
+                SelectList yearSelectList = new SelectList(yearsList);
+                ViewBag.Years = yearSelectList;
+                return View(prod);
             }
             return RedirectToAction("Index");
         }
