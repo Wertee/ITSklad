@@ -9,7 +9,6 @@ namespace SkladIdentity.EF
         public EFIdentityContext(DbContextOptions<EFIdentityContext> options) : base(options)
         {
             Database.EnsureCreated();
-
         }
     }
 }

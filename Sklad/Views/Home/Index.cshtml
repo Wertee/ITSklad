@@ -6,7 +6,7 @@
     <a asp-action="NewProduct" class="btn btn-primary">Новая позиция</a>
 </div>
 <div class="row mb-4">
-    <table class="table table-bordered">
+    <table class="table table-bordered table-responsive-lg">
         <thead>
             <tr>
                 <th>
@@ -20,6 +20,9 @@
                 </th>
                 <th>
                     Год прихода партии
+                </th>
+                <th>
+                    Заявитель
                 </th>
                 <th>
                     Выдача/Получение
@@ -41,6 +44,9 @@
                     </td>
                     <td>
                         @item.YearOfIncome
+                    </td>
+                    <td>
+                        @item.Applicant
                     </td>
                     <td>
                         <a class="btn btn-primary" asp-action="Outcome" asp-route-id="@item.Id">Выдача</a>

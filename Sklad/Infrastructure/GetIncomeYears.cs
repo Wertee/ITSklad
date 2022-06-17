@@ -12,7 +12,7 @@ namespace Sklad.Infrastructure
         public static List<int> GetYears()
         {
             List<int> yearsList = new();
-            for (int i = DateTime.Now.Year - 5; i <= DateTime.Now.Year; i++)
+            for (int i = DateTime.Now.Year; i >= DateTime.Now.Year-5; i--)
             {
                 yearsList.Add(i);
             }

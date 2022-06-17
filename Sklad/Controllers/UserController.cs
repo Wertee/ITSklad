@@ -17,7 +17,7 @@ namespace Sklad.Controllers
         }
         public IActionResult UserIndex()
         {
-            return View(_context.Products.Where(p => p.CanBeGiven & p.CountToGive>0).ToList());
+            return View(_context.Products.Where(p => p.CanBeGiven && p.CountToGive>0).ToList());
         }
     }
 }

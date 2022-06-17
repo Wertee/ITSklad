@@ -18,7 +18,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label">Описание</label>
-                <input asp-for="Description" class="form-control" />
+                <textarea asp-for="Description" class="form-control"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -29,6 +29,11 @@
             <div class="form-group">
                 <label class="control-label">Год прихода партии</label>
                 @Html.DropDownListFor(model => model.YearOfIncome,ViewBag.Years as SelectList)
+            </div>
+            <div class="form-group">
+                <label asp-for="Applicant" class="control-label">Заявитель</label>
+                <input asp-for="Applicant" class="form-control" />
+                <span asp-validation-for="CurrentCount" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Добавить" class="btn btn-primary" />

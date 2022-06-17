@@ -10,6 +10,7 @@ namespace Sklad.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public string Applicant { get; set; }
         public int CurrentCount { get; set; }
         public bool CanBeGiven { get; set; }
         public int CountToGive { get; set; }
