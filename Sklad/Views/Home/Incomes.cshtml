@@ -13,6 +13,9 @@
                 Наименование
             </th>
             <th>
+                Описание
+            </th>
+            <th>
                 Количество
             </th>
             <th>
@@ -23,6 +26,9 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>
+                @item.Product.Name
+            </td>
             <td>
                 @item.Product.Description
             </td>
