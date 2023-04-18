@@ -24,7 +24,7 @@
                     Заявитель
                 </th>
                 <th>
-                    Выдача/Получение
+                    Выдача/Получение/Удаление
                 </th>
             </tr>
         </thead>
@@ -50,7 +50,7 @@
                     <td>
                         <a class="btn btn-primary" asp-action="Outcome" asp-route-id="@item.Id">Выдача</a>
                         <a class="btn btn-primary" asp-action="Income" asp-route-id="@item.Id">Получение</a>
-
+                        <a class="btn btn-danger" asp-action="DeleteProduct" asp-route-id="@item.Id">Удалить</a>
                     </td>
                 </tr>
             }

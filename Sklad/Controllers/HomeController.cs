@@ -120,8 +120,13 @@ namespace Sklad.Controllers
         public IActionResult EditProduct(int? id)
         {
             var prod = _context.Products.Find(id);
-            if(prod!=null)
+            if (prod != null)
+            {
+                var yearsList = GetIncomeYears.GetYears();
+                SelectList yearSelectList = new SelectList(yearsList);
+                ViewBag.Years = yearSelectList;
                 return View(prod);
+            }
             return RedirectToAction("Index");
         }
 
@@ -130,15 +135,29 @@ namespace Sklad.Controllers
         {
             if (prod != null)
             {
-                if (prod.CountToGive > prod.CurrentCount || prod.CountToGive == 0)
+                if (prod.CountToGive > prod.CurrentCount || (prod.CountToGive == 0 && prod.CanBeGiven))
                 {
                     ModelState.AddModelError("","Введите корректное количество");
+                    var yearsList = GetIncomeYears.GetYears();
+                    SelectList yearSelectList = new SelectList(yearsList);
+                    ViewBag.Years = yearSelectList;
                     return View(prod);
                 }
                 _context.Products.Update(prod);
                 _context.SaveChanges();
             }
 
+            return RedirectToAction("Index");
+        }
+
+        
+        public IActionResult DeleteProduct(int? id)
+        {
+            var prod = _context.Products.Find(id);
+            if (prod == null)
+                return RedirectToAction("Index");
+            _context.Products.Remove(prod);
+            _context.SaveChanges();
             return RedirectToAction("Index");
         }
 
