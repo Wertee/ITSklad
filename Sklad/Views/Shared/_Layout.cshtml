@@ -9,6 +9,9 @@
     <title>@ViewData["Title"] - Sklad</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+
+    <script type="text/javascript" src="/js/jquery-latest.js"></script>
+    <script type="text/javascript" src="/js/jquery.tablesorter.js"></script>
 </head>
 <body>
     <header>
@@ -34,6 +37,10 @@
                     <li class="nav-item">
                         <a class="nav-link text-light" asp-controller="Home" asp-action="Outcomes">Расход</a>
                     </li>
+                    
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-controller="Category" asp-action="Index">Категории</a>
+                        </li>
                 </ul>
                 
                     @if (SignInManager.IsSignedIn(User))
@@ -105,6 +112,8 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="/js/jquery-latest.js"></script>
+    <script type="text/javascript" src="/js/jquery.tablesorter.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

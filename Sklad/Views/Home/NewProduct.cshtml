@@ -30,11 +30,35 @@
                 <label class="control-label">Год прихода партии</label>
                 @Html.DropDownListFor(model => model.YearOfIncome,ViewBag.Years as SelectList)
             </div>
+            
+            <div class="form-group">
+                <label class="control-label">Категория</label>
+                @{
+                    List<SelectListItem> listItems = new List<SelectListItem>();
+                    foreach (var item in ViewBag.Categories)
+                    {
+                        listItems.Add(new SelectListItem()
+                        {
+                            Text = item.Name,
+                            Value = item.Id.ToString()
+                        });
+                    }
+                    @Html.DropDownListFor(model => model.CategoryId, listItems,"---------")
+                }
+            </div>
+            
             <div class="form-group">
                 <label asp-for="Applicant" class="control-label">Заявитель</label>
                 <input asp-for="Applicant" class="form-control" />
                 <span asp-validation-for="CurrentCount" class="text-danger"></span>
             </div>
+
+            <div class="form-group">
+                <label asp-for="Used" class="control-label">Б/У</label>
+                <input asp-for="Used" class="custom-checkbox" />
+                <span asp-validation-for="Used" class="text-danger"></span>
+            </div>
+
             <div class="form-group">
                 <input type="submit" value="Добавить" class="btn btn-primary" />
                 <a class="btn btn-primary" asp-action="Index">Назад к списку</a>
@@ -46,3 +70,4 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+

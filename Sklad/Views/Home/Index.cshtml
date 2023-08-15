@@ -4,8 +4,13 @@
 
 <a asp-action="NewProduct" class="btn btn-primary">Новая позиция</a>
 
+<script>
+    $(document).ready(function () {
+        $("#tb1").tablesorter();
+    });
+</script>
 
-    <table class="table table-bordered">
+    <table id="tb1" class="table table-bordered">
         <thead>
             <tr>
                 <th>
@@ -19,6 +24,9 @@
                 </th>
                 <th>
                     Год прихода партии
+                </th>
+                <th>
+                    Б/У
                 </th>
                 <th>
                     Заявитель
@@ -44,6 +52,15 @@
                     <td>
                         @item.YearOfIncome
                     </td>
+                        @if(item.Used){
+                            <td>
+                            Б/У
+                            </td>
+                        }else{
+                            <td>
+                            Новый
+                            </td>
+                        }
                     <td>
                         @item.Applicant
                     </td>
@@ -56,3 +73,5 @@
             }
         </tbody>
     </table>
+
+

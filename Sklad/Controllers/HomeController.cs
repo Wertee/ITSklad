@@ -23,8 +23,9 @@ namespace Sklad.Controllers
         {
             _context = con;
         }
-        public IActionResult Index() => View(_context.Products.Where(x => x.CurrentCount>0).ToList());
-        
+        public IActionResult Index() => View(_context.Products.Where(x => x.CurrentCount > 0).OrderBy(x => x.Name).ToList());
+
+
         public IActionResult Outcome(int? id)
         {
             var prod = _context.Products.Find(id);
@@ -39,7 +40,7 @@ namespace Sklad.Controllers
             var prod = _context.Products.Find(outcome.ProductId);
             if (outcome.Count == 0)
             {
-                ModelState.AddModelError("","Необходимо ввести количество");
+                ModelState.AddModelError("", "Необходимо ввести количество");
                 return View(outcome);
             }
             try
@@ -54,10 +55,10 @@ namespace Sklad.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("","Нельзя выдать больше чем есть на складе");
+                ModelState.AddModelError("", "Нельзя выдать больше чем есть на складе");
                 return View(outcome);
             }
-            
+
             _context.Outcomes.Add(outcome);
             _context.Products.Update(prod);
             _context.SaveChanges();
@@ -70,7 +71,7 @@ namespace Sklad.Controllers
             if (prod != null)
                 return View(new Income() { ProductId = prod.Id });
             return RedirectToAction("Index");
-            
+
         }
 
         [HttpPost]
@@ -94,16 +95,20 @@ namespace Sklad.Controllers
             var yearsList = GetIncomeYears.GetYears();
             SelectList yearSelectList = new SelectList(yearsList);
             ViewBag.Years = yearSelectList;
+
+            var categories = _context.Categories.ToList();
+            ViewBag.Categories = categories;
+            
             return View();
         }
         [HttpPost]
         public IActionResult NewProduct(Product prod)
         {
-            if (prod != null && prod.CurrentCount>0)
+            if (prod != null && prod.CurrentCount > 0)
             {
                 _context.Products.Add(prod);
                 _context.SaveChanges();
-                _context.Incomes.Add(new Income() { ProductId = prod.Id, Count = prod.CurrentCount,Date = DateTime.Now});
+                _context.Incomes.Add(new Income() { ProductId = prod.Id, Count = prod.CurrentCount, Date = DateTime.Now });
                 _context.SaveChanges();
             }
             else
@@ -125,6 +130,10 @@ namespace Sklad.Controllers
                 var yearsList = GetIncomeYears.GetYears();
                 SelectList yearSelectList = new SelectList(yearsList);
                 ViewBag.Years = yearSelectList;
+                
+                var categories = _context.Categories.ToList();
+                ViewBag.Categories = categories;
+                
                 return View(prod);
             }
             return RedirectToAction("Index");
@@ -137,7 +146,7 @@ namespace Sklad.Controllers
             {
                 if (prod.CountToGive > prod.CurrentCount || (prod.CountToGive == 0 && prod.CanBeGiven))
                 {
-                    ModelState.AddModelError("","Введите корректное количество");
+                    ModelState.AddModelError("", "Введите корректное количество");
                     var yearsList = GetIncomeYears.GetYears();
                     SelectList yearSelectList = new SelectList(yearsList);
                     ViewBag.Years = yearSelectList;
@@ -150,7 +159,7 @@ namespace Sklad.Controllers
             return RedirectToAction("Index");
         }
 
-        
+
         public IActionResult DeleteProduct(int? id)
         {
             var prod = _context.Products.Find(id);

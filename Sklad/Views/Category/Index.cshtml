@@ -1,0 +1,27 @@
+﻿@model List<Sklad.Models.Category>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+<a asp-action="CreateCategory" class="btn btn-primary">Новая категория</a>
+
+<table id="tb1" class="table table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    Наименование
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.Name
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>

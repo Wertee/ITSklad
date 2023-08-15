@@ -7,7 +7,7 @@ namespace Sklad.Models.EF
         public DbSet<Product> Products { get; set; }
         public DbSet<Income> Incomes { get; set; }
         public DbSet<Outcome> Outcomes { get; set; }
-
+        public DbSet<Category> Categories { get; set; }
         public EFContext(DbContextOptions<EFContext> options) : base(options)
         {
             //Database.EnsureDeleted();

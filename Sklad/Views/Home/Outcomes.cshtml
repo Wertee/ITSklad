@@ -11,6 +11,9 @@
             Описание
         </th>
         <th>
+            Б/У
+        </th>
+        <th>
             Количество
         </th>
         <th>
@@ -30,6 +33,16 @@
             <td>
                 @item.Product.Description
             </td>
+            @if(item.Product.Used){
+            <td>
+               Б/У
+            </td>
+            }else{
+            <td>
+               Новый
+            </td>
+            }
+
             <td>
                 @item.Count
             </td>
