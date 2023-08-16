@@ -39,12 +39,55 @@ public class CategoryController:Controller
         {
             _context.Categories.Add(category);
             _context.SaveChanges();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index");
         }
         catch (Exception e)
         {
             ModelState.AddModelError("", "Ошибка записи в базу данных!");
             return View(category);
         }
+    }
+
+    public IActionResult DeleteCategory(int id)
+    {
+        var category = _context.Categories.Find(id);
+        if (category == null)
+            return RedirectToAction("Index");
+
+        try
+        {
+            var productsWithCategory = _context.Products.Where(p => p.CategoryId == category.Id).ToList();
+            foreach (var product in productsWithCategory)
+            {
+                product.CategoryId = null;
+            }
+            _context.SaveChanges();
+            _context.Categories.Remove(category);
+            _context.SaveChanges();
+        }
+        catch (Exception e)
+        {
+            
+        }
+        
+        return RedirectToAction("Index");
+    }
+
+    public IActionResult EditCategory(int id)
+    {
+        var category = _context.Categories.Find(id);
+        if (category == null)
+            return RedirectToAction("Index");
+        return View(category);
+    }
+
+    [HttpPost]
+    public IActionResult EditCategory(Category category)
+    {
+        if (category == null)
+            return RedirectToAction("Index");
+        _context.Categories.Update(category);
+        _context.SaveChanges();
+        return RedirectToAction("Index");
     }
 }

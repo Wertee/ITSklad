@@ -9,8 +9,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Sklad.Infrastructure;
 using Sklad.Models.EF;
+using Sklad.Models.Filters;
 
 namespace Sklad.Controllers
 {
@@ -23,7 +25,30 @@ namespace Sklad.Controllers
         {
             _context = con;
         }
-        public IActionResult Index() => View(_context.Products.Where(x => x.CurrentCount > 0).OrderBy(x => x.Name).ToList());
+
+        public IActionResult Index(ProductFilter filter)
+        {
+
+            var products = _context.Products.Where(p => p.CurrentCount > 0);
+            if (!filter.Name.IsNullOrEmpty())
+                products = filter.ExactMatch 
+                    ? products.Where(p => p.Name == filter.Name)
+                    : products.Where(p => p.Name.Contains(filter.Name));
+            if (!filter.Description.IsNullOrEmpty())
+                products = filter.ExactMatch
+                    ? products.Where(p => p.Description == filter.Description)
+                    : products.Where(p=>p.Description.Contains(filter.Description));
+            if (!filter.Applicant.IsNullOrEmpty())
+                products = filter.ExactMatch 
+                    ? products.Where(p => p.Applicant == filter.Applicant)
+                    : products.Where(p=>p.Applicant.Contains(filter.Applicant));
+            if (filter.YearOfIncome != 0)
+                products = products.Where(p => p.YearOfIncome == filter.YearOfIncome);
+
+            var foundProducts = products.OrderBy(p => p.Name).Include(p=>p.Category).ToList();
+            
+            return View(foundProducts);
+        }
 
 
         public IActionResult Outcome(int? id)
@@ -170,9 +195,44 @@ namespace Sklad.Controllers
             return RedirectToAction("Index");
         }
 
-        public ViewResult Incomes() => View(_context.Incomes.Include(x => x.Product).ToList());
+        public ViewResult Incomes(IncomeFilter filter)
+        {
+            var incomes = _context.Incomes.Include(x => x.Product).AsQueryable();
+            if (!filter.Name.IsNullOrEmpty())
+                incomes = filter.ExactMatch 
+                    ? incomes.Where(p => p.Product.Name == filter.Name)
+                    : incomes.Where(p => p.Product.Name.Contains(filter.Name));
+            if (!filter.Description.IsNullOrEmpty())
+                incomes = filter.ExactMatch
+                    ? incomes.Where(p => p.Product.Description == filter.Description)
+                    : incomes.Where(p=>p.Product.Description.Contains(filter.Description));
+            if (filter.YearOfIncome != 0)
+                incomes = incomes.Where(p => p.Date.Year == filter.YearOfIncome);
+            return View(incomes.ToList());
+        } 
 
-        public ViewResult Outcomes() => View(_context.Outcomes.Include(x => x.Product).ToList());
+        public ViewResult Outcomes(OutcomeFilter filter)
+        {
+            var outcomes = _context.Outcomes.Include(x => x.Product).AsQueryable();
+            if (!filter.Name.IsNullOrEmpty())
+                outcomes = filter.ExactMatch 
+                    ? outcomes.Where(p => p.Product.Name == filter.Name)
+                    : outcomes.Where(p => p.Product.Name.Contains(filter.Name));
+            if (!filter.Description.IsNullOrEmpty())
+                outcomes = filter.ExactMatch
+                    ? outcomes.Where(p => p.Product.Description == filter.Description)
+                    : outcomes.Where(p=>p.Product.Description.Contains(filter.Description));
+            if (!filter.Recipient.IsNullOrEmpty())
+                outcomes = filter.ExactMatch
+                    ? outcomes.Where(p => p.Name == filter.Recipient)
+                    : outcomes.Where(p => p.Name.Contains(filter.Recipient));
+                
+            if (filter.YearOfOutcome != 0)
+                outcomes = outcomes.Where(p => p.Date.Year == filter.YearOfOutcome);
+            return View(outcomes);
+        } 
+
+        
 
     }
 }

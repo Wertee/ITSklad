@@ -10,7 +10,33 @@
     });
 </script>
 
-    <table id="tb1" class="table table-bordered">
+<div>
+    <form asp-action="Index">
+        <div class="input-group mb-3">
+            <span style="min-width: 130px; max-width: 130px" class="input-group-text" id="basic-addon1">Наименование</span>
+            <input type="text" name="Name" value="" style="width: 15%" id="Name" />
+            <span style="min-width: 130px; max-width: 130px" class="input-group-text" id="basic-addon1">Описание:</span>
+            <input type="text" name="Description" value="" style="width: 15%" id="Description" />
+        </div>
+        <div class="input-group mb-3">
+            <span style="min-width: 130px; max-width: 130px" class="input-group-text" id="basic-addon1">Год партии</span>
+            <input type="text" name="YearOfIncome" value="@ViewBag.ModelToFind" style="width: 15%" id="Model" />
+            <span style="min-width: 130px; max-width: 130px" class="input-group-text" id="basic-addon1">Заявитель</span>
+            <input type="text" name="Applicant" value="@ViewBag.NaimToFind" style="width: 15%" id="Naim"/>
+        </div>
+
+        <div>
+            Точный поиск: <input style="padding-left: 10px" type="checkbox" name="ExactMatch" value="true"/>
+        </div>
+
+        <input style="padding-bottom: 10px" type="submit" class="btn btn-primary" value="Поиск" />
+    </form>
+    
+</div>
+
+
+
+<table id="tb1" class="table table-bordered">
         <thead>
             <tr>
                 <th>
@@ -18,6 +44,9 @@
                 </th>
                 <th>
                     Описание
+                </th>
+                <th>
+                    Категория
                 </th>
                 <th>
                     Текущее количество
@@ -32,7 +61,7 @@
                     Заявитель
                 </th>
                 <th>
-                    Выдача/Получение/Удаление
+                    Выдача/Получение
                 </th>
             </tr>
         </thead>
@@ -45,6 +74,9 @@
                     </td>
                     <td>
                         @item.Description
+                    </td>
+                    <td>
+                        @item.Category?.Name
                     </td>
                     <td>
                         @item.CurrentCount
@@ -67,7 +99,6 @@
                     <td>
                         <a class="btn btn-primary" asp-action="Outcome" asp-route-id="@item.Id">Выдача</a>
                         <a class="btn btn-primary" asp-action="Income" asp-route-id="@item.Id">Получение</a>
-                        <a class="btn btn-danger" asp-action="DeleteProduct" asp-route-id="@item.Id">Удалить</a>
                     </td>
                 </tr>
             }

@@ -1,7 +1,7 @@
 ﻿@model List<Sklad.Models.Category>
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Категории";
     Layout = "_Layout";
 }
 <a asp-action="CreateCategory" class="btn btn-primary">Новая категория</a>
@@ -19,7 +19,7 @@
             {
                 <tr>
                     <td>
-                        @item.Name
+                        <a asp-action="EditCategory" asp-route-id="@item.Id">@item.Name</a>
                     </td>
                 </tr>
             }

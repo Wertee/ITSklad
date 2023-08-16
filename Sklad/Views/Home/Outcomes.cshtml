@@ -1,6 +1,27 @@
 ﻿@model IEnumerable<Outcome>
 <h1>Расход</h1>
 
+<form asp-action="Outcomes">
+        <div class="input-group mb-3">
+            <span style="min-width: 130px; max-width: 130px" class="input-group-text" id="basic-addon1">Наименование</span>
+            <input type="text" name="Name" value="" style="width: 15%" id="Name" />
+            <span style="min-width: 130px; max-width: 130px" class="input-group-text" id="basic-addon1">Описание:</span>
+            <input type="text" name="Description" value="" style="width: 15%" id="Description" />
+        </div>
+        <div class="input-group mb-3">
+            <span style="min-width: 130px; max-width: 130px" class="input-group-text" id="basic-addon1">Год партии</span>
+            <input type="text" name="YearOfIncome" value="@ViewBag.ModelToFind" style="width: 15%" id="Model" />
+            <span style="min-width: 130px; max-width: 130px" class="input-group-text" id="basic-addon1">Получатель</span>
+            <input type="text" name="Recipient" value="@ViewBag.NaimToFind" style="width: 15%" id="Naim"/>
+        </div>
+
+        <div>
+            Точный поиск: <input style="padding-left: 10px" type="checkbox" name="ExactMatch" value="true"/>
+        </div>
+
+        <input style="padding-bottom: 10px" type="submit" class="btn btn-primary" value="Поиск" />
+    </form>
+
 <table class="table table-bordered">
     <thead>
     <tr>
