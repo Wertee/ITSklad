@@ -28,7 +28,6 @@ namespace Sklad
             services.AddDbContext<EFIdentityContext>(options =>
                 options.UseSqlServer(Configuration["Data:User:ConnectionString"]));
             services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<EFIdentityContext>();
-
             services.AddControllersWithViews();
         }
 

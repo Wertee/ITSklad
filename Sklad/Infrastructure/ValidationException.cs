@@ -4,6 +4,6 @@ namespace Sklad.Infrastructure
 {
     public class ValidationException:Exception
     {
-
+        
     }
 }

@@ -29,7 +29,7 @@ namespace Sklad.Controllers
         public IActionResult Index(ProductFilter filter)
         {
 
-            var products = _context.Products.Where(p => p.CurrentCount > 0);
+            var products = _context.Products.Where(p => p.CurrentCount > 0).AsQueryable();
             if (!filter.Name.IsNullOrEmpty())
                 products = filter.ExactMatch 
                     ? products.Where(p => p.Name == filter.Name)

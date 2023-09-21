@@ -11,7 +11,7 @@ namespace Sklad.Models.EF
         public EFContext(DbContextOptions<EFContext> options) : base(options)
         {
             //Database.EnsureDeleted();
-            Database.EnsureCreated();
+            //Database.EnsureCreated();
         }
     }
 }
