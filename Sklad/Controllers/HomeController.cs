@@ -226,7 +226,6 @@ namespace Sklad.Controllers
                 outcomes = filter.ExactMatch
                     ? outcomes.Where(p => p.Name == filter.Recipient)
                     : outcomes.Where(p => p.Name.Contains(filter.Recipient));
-                
             if (filter.YearOfOutcome != 0)
                 outcomes = outcomes.Where(p => p.Date.Year == filter.YearOfOutcome);
             return View(outcomes);
