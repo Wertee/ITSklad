@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Sklad.Models;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -28,25 +24,30 @@ namespace Sklad.Controllers
 
         public IActionResult Index(ProductFilter filter)
         {
-
             var products = _context.Products.Where(p => p.CurrentCount > 0).AsQueryable();
             if (!filter.Name.IsNullOrEmpty())
-                products = filter.ExactMatch 
+                products = filter.ExactMatch
                     ? products.Where(p => p.Name == filter.Name)
                     : products.Where(p => p.Name.Contains(filter.Name));
             if (!filter.Description.IsNullOrEmpty())
                 products = filter.ExactMatch
                     ? products.Where(p => p.Description == filter.Description)
-                    : products.Where(p=>p.Description.Contains(filter.Description));
+                    : products.Where(p => p.Description.Contains(filter.Description));
             if (!filter.Applicant.IsNullOrEmpty())
-                products = filter.ExactMatch 
+                products = filter.ExactMatch
                     ? products.Where(p => p.Applicant == filter.Applicant)
-                    : products.Where(p=>p.Applicant.Contains(filter.Applicant));
+                    : products.Where(p => p.Applicant.Contains(filter.Applicant));
             if (filter.YearOfIncome != 0)
                 products = products.Where(p => p.YearOfIncome == filter.YearOfIncome);
 
-            var foundProducts = products.OrderBy(p => p.Name).Include(p=>p.Category).ToList();
+            if (!filter.CategoryName.IsNullOrEmpty())
+                products = products.Where(p => p.CategoryId == int.Parse(filter.CategoryName));
             
+            var categories = _context.Categories.ToList();
+            ViewBag.Categories = categories;
+
+            var foundProducts = products.OrderBy(p => p.Name).Include(p => p.Category).ToList();
+
             return View(foundProducts);
         }
 
@@ -54,6 +55,8 @@ namespace Sklad.Controllers
         public IActionResult Outcome(int? id)
         {
             var prod = _context.Products.Find(id);
+            var categories = _context.Categories.ToList();
+            ViewBag.Categories = categories;
             if (prod != null)
                 return View(new Outcome() { ProductId = prod.Id });
             return RedirectToAction("Index");
@@ -68,6 +71,7 @@ namespace Sklad.Controllers
                 ModelState.AddModelError("", "Необходимо ввести количество");
                 return View(outcome);
             }
+
             try
             {
                 prod.CurrentCount = NewCount.OutcomeCount(prod.CurrentCount, outcome.Count);
@@ -84,19 +88,32 @@ namespace Sklad.Controllers
                 return View(outcome);
             }
 
-            _context.Outcomes.Add(outcome);
-            _context.Products.Update(prod);
-            _context.SaveChanges();
-            return RedirectToAction("Index");
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                try
+                {
+                    _context.Outcomes.Add(outcome);
+                    _context.Products.Update(prod);
+                    _context.SaveChanges();
+                    transaction.Commit();
+                    return RedirectToAction("Index");
+                }
+                catch (Exception e)
+                {
+                    ModelState.AddModelError("", "Ошибка сохранения. Попробуйте еще раз");
+                    return View(outcome);
+                }
+            }
         }
 
         public IActionResult Income(int? id)
         {
             var prod = _context.Products.Find(id);
+            var categories = _context.Categories.ToList();
+            ViewBag.Categories = categories;
             if (prod != null)
                 return View(new Income() { ProductId = prod.Id });
             return RedirectToAction("Index");
-
         }
 
         [HttpPost]
@@ -108,11 +125,24 @@ namespace Sklad.Controllers
                 ModelState.AddModelError("", "Не введено количество");
                 return View(income);
             }
+
             prod.CurrentCount = NewCount.IncomeCount(prod.CurrentCount, income.Count);
-            _context.Incomes.Add(income);
-            _context.Products.Update(prod);
-            _context.SaveChanges();
-            return RedirectToAction("Index");
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                try
+                {
+                    _context.Incomes.Add(income);
+                    _context.Products.Update(prod);
+                    _context.SaveChanges();
+                    transaction.Commit();
+                    return RedirectToAction("Index");
+                }
+                catch (Exception e)
+                {
+                    ModelState.AddModelError("", "Ошибка сохранения. Попробуйте еще раз");
+                    return View(income);
+                }
+            }
         }
 
         public IActionResult NewProduct()
@@ -123,18 +153,32 @@ namespace Sklad.Controllers
 
             var categories = _context.Categories.ToList();
             ViewBag.Categories = categories;
-            
+
             return View();
         }
+
         [HttpPost]
         public IActionResult NewProduct(Product prod)
         {
             if (prod != null && prod.CurrentCount > 0)
             {
-                _context.Products.Add(prod);
-                _context.SaveChanges();
-                _context.Incomes.Add(new Income() { ProductId = prod.Id, Count = prod.CurrentCount, Date = DateTime.Now });
-                _context.SaveChanges();
+                using (var transaction = _context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        _context.Products.Add(prod);
+                        _context.SaveChanges();
+                        _context.Incomes.Add(new Income()
+                            { ProductId = prod.Id, Count = prod.CurrentCount, Date = DateTime.Now });
+                        _context.SaveChanges();
+                        transaction.Commit();
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        throw;
+                    }
+                }
             }
             else
             {
@@ -144,6 +188,7 @@ namespace Sklad.Controllers
                 ViewBag.Years = yearSelectList;
                 return View(prod);
             }
+
             return RedirectToAction("Index");
         }
 
@@ -155,12 +200,13 @@ namespace Sklad.Controllers
                 var yearsList = GetIncomeYears.GetYears();
                 SelectList yearSelectList = new SelectList(yearsList);
                 ViewBag.Years = yearSelectList;
-                
+
                 var categories = _context.Categories.ToList();
                 ViewBag.Categories = categories;
-                
+
                 return View(prod);
             }
+
             return RedirectToAction("Index");
         }
 
@@ -177,6 +223,7 @@ namespace Sklad.Controllers
                     ViewBag.Years = yearSelectList;
                     return View(prod);
                 }
+
                 _context.Products.Update(prod);
                 _context.SaveChanges();
             }
@@ -199,39 +246,50 @@ namespace Sklad.Controllers
         {
             var incomes = _context.Incomes.Include(x => x.Product).AsQueryable();
             if (!filter.Name.IsNullOrEmpty())
-                incomes = filter.ExactMatch 
+                incomes = filter.ExactMatch
                     ? incomes.Where(p => p.Product.Name == filter.Name)
                     : incomes.Where(p => p.Product.Name.Contains(filter.Name));
             if (!filter.Description.IsNullOrEmpty())
                 incomes = filter.ExactMatch
                     ? incomes.Where(p => p.Product.Description == filter.Description)
-                    : incomes.Where(p=>p.Product.Description.Contains(filter.Description));
+                    : incomes.Where(p => p.Product.Description.Contains(filter.Description));
             if (filter.YearOfIncome != 0)
                 incomes = incomes.Where(p => p.Date.Year == filter.YearOfIncome);
+            
+            if (!filter.CategoryName.IsNullOrEmpty())
+                incomes = incomes.Where(p => p.Product.CategoryId == int.Parse(filter.CategoryName));
+            
+            var categories = _context.Categories.ToList();
+            ViewBag.Categories = categories;
+            
             return View(incomes.ToList());
-        } 
+        }
 
         public ViewResult Outcomes(OutcomeFilter filter)
         {
             var outcomes = _context.Outcomes.Include(x => x.Product).AsQueryable();
             if (!filter.Name.IsNullOrEmpty())
-                outcomes = filter.ExactMatch 
+                outcomes = filter.ExactMatch
                     ? outcomes.Where(p => p.Product.Name == filter.Name)
                     : outcomes.Where(p => p.Product.Name.Contains(filter.Name));
             if (!filter.Description.IsNullOrEmpty())
                 outcomes = filter.ExactMatch
                     ? outcomes.Where(p => p.Product.Description == filter.Description)
-                    : outcomes.Where(p=>p.Product.Description.Contains(filter.Description));
+                    : outcomes.Where(p => p.Product.Description.Contains(filter.Description));
             if (!filter.Recipient.IsNullOrEmpty())
                 outcomes = filter.ExactMatch
                     ? outcomes.Where(p => p.Name == filter.Recipient)
                     : outcomes.Where(p => p.Name.Contains(filter.Recipient));
             if (filter.YearOfOutcome != 0)
                 outcomes = outcomes.Where(p => p.Date.Year == filter.YearOfOutcome);
+            
+            if (!filter.CategoryName.IsNullOrEmpty())
+                outcomes = outcomes.Where(p => p.Product.CategoryId == int.Parse(filter.CategoryName));
+            
+            var categories = _context.Categories.ToList();
+            ViewBag.Categories = categories;
+            
             return View(outcomes);
-        } 
-
-        
-
+        }
     }
 }

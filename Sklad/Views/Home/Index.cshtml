@@ -25,6 +25,22 @@
             <input type="text" name="Applicant" value="@ViewBag.NaimToFind" style="width: 15%" id="Naim"/>
         </div>
 
+        <div class="form-group">
+            <label class="control-label">Категория</label>
+            @{
+                List<SelectListItem> listItems = new List<SelectListItem>();
+                foreach (var item in ViewBag.Categories)
+                {
+                    listItems.Add(new SelectListItem()
+                    {
+                        Text = item.Name,
+                        Value = item.Id.ToString()
+                    });
+                }
+                @Html.DropDownList("CategoryName", listItems, "---------")
+            }
+        </div>
+
         <div>
             Точный поиск: <input style="padding-left: 10px" type="checkbox" name="ExactMatch" value="true"/>
         </div>
