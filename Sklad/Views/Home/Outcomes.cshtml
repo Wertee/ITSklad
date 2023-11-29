@@ -27,7 +27,7 @@
                     Value = item.Id.ToString()
                 });
             }
-            @Html.DropDownList("CategoryName", listItems, "---------")
+            @Html.DropDownList("CategoryName", listItems, "---------",new {@class = "dropdown"})
         }
     </div>
 
@@ -75,7 +75,7 @@
                 @item.Product.Description
             </td>
             <td>
-                @item.Product.Category.Name
+                @item.Product.Category?.Name
             </td>
             @if (item.Product.Used)
             {

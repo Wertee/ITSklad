@@ -12,6 +12,12 @@ a {
   color: #0366d6;
 }
 
+.dropdown-list {
+  width: 200px;
+  height: 30px;
+  border: 1px solid #ccc;
+}
+
 .btn-primary {
   color: #fff;
   background-color: #1b6ec2;

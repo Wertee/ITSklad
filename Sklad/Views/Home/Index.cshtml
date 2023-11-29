@@ -1,4 +1,8 @@
-﻿@model IEnumerable<Product>
+﻿@{
+    Layout = "_Layout";
+}
+
+@model IEnumerable<Product>
 
 <h1>Список позиций в комнате 205</h1>
 
@@ -37,7 +41,7 @@
                         Value = item.Id.ToString()
                     });
                 }
-                @Html.DropDownList("CategoryName", listItems, "---------")
+                @Html.DropDownList("CategoryName", listItems, "---------", new {@class = "dropdown-list"})
             }
         </div>
 
@@ -51,74 +55,80 @@
 </div>
 
 
-
+<div>
+    <p>
+        Количество найденых материалов: @Model.Sum((x=>x.CurrentCount))
+    </p>
+</div>
 <table id="tb1" class="table table-bordered">
-        <thead>
-            <tr>
-                <th>
-                    Наименование
-                </th>
-                <th>
-                    Описание
-                </th>
-                <th>
-                    Категория
-                </th>
-                <th>
-                    Текущее количество
-                </th>
-                <th>
-                    Год прихода партии
-                </th>
-                <th>
+    <thead>
+    <tr>
+        <th>
+            Наименование
+        </th>
+        <th>
+            Описание
+        </th>
+        <th>
+            Категория
+        </th>
+        <th>
+            Текущее количество
+        </th>
+        <th>
+            Год прихода партии
+        </th>
+        <th>
+            Б/У
+        </th>
+        <th>
+            Заявитель
+        </th>
+        <th>
+            Выдача/Получение
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <a asp-action="EditProduct" asp-route-id="@item.Id">@item.Name</a>
+            </td>
+            <td>
+                @item.Description
+            </td>
+            <td>
+                @item.Category?.Name
+            </td>
+            <td>
+                @item.CurrentCount
+            </td>
+            <td>
+                @item.YearOfIncome
+            </td>
+            @if(item.Used){
+                <td>
                     Б/У
-                </th>
-                <th>
-                    Заявитель
-                </th>
-                <th>
-                    Выдача/Получение
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        <a asp-action="EditProduct" asp-route-id="@item.Id">@item.Name</a>
-                    </td>
-                    <td>
-                        @item.Description
-                    </td>
-                    <td>
-                        @item.Category?.Name
-                    </td>
-                    <td>
-                        @item.CurrentCount
-                    </td>
-                    <td>
-                        @item.YearOfIncome
-                    </td>
-                        @if(item.Used){
-                            <td>
-                            Б/У
-                            </td>
-                        }else{
-                            <td>
-                            Новый
-                            </td>
-                        }
-                    <td>
-                        @item.Applicant
-                    </td>
-                    <td>
-                        <a class="btn btn-primary" asp-action="Outcome" asp-route-id="@item.Id">Выдача</a>
-                        <a class="btn btn-primary" asp-action="Income" asp-route-id="@item.Id">Получение</a>
-                    </td>
-                </tr>
+                </td>
+            }else{
+                <td>
+                    Новый
+                </td>
             }
-        </tbody>
-    </table>
+            <td>
+                @item.Applicant
+            </td>
+            <td>
+                <a class="btn btn-primary" asp-action="Outcome" asp-route-id="@item.Id">Выдача</a>
+                <a class="btn btn-primary" asp-action="Income" asp-route-id="@item.Id">Получение</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+
 
 

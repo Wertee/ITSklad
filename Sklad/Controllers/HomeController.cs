@@ -262,7 +262,7 @@ namespace Sklad.Controllers
             var categories = _context.Categories.ToList();
             ViewBag.Categories = categories;
             
-            return View(incomes.ToList());
+            return View(incomes.OrderByDescending(x=>x.Date).ToList());
         }
 
         public ViewResult Outcomes(OutcomeFilter filter)
@@ -289,7 +289,7 @@ namespace Sklad.Controllers
             var categories = _context.Categories.ToList();
             ViewBag.Categories = categories;
             
-            return View(outcomes);
+            return View(outcomes.OrderByDescending(x=>x.Date).ToList());
         }
     }
 }

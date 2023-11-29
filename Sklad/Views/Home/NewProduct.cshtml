@@ -28,7 +28,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label">Год прихода партии</label>
-                @Html.DropDownListFor(model => model.YearOfIncome,ViewBag.Years as SelectList)
+                @Html.DropDownListFor(model => model.YearOfIncome,ViewBag.Years as SelectList,new {@class = "dropdown-list"})
             </div>
             
             <div class="form-group">
@@ -43,7 +43,7 @@
                             Value = item.Id.ToString()
                         });
                     }
-                    @Html.DropDownListFor(model => model.CategoryId, listItems,"---------")
+                    @Html.DropDownListFor(model => model.CategoryId, listItems,"---------",new {@class = "dropdown-list"})
                 }
             </div>
             

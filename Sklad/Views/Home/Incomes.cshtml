@@ -30,7 +30,7 @@
                     Value = item.Id.ToString()
                 });
             }
-            @Html.DropDownList("CategoryName", listItems, "---------")
+            @Html.DropDownList("CategoryName", listItems, "---------",new {@class = "dropdown-list"})
         }
     </div>
 
@@ -72,7 +72,7 @@
                 @item.Product.Description
             </td>
             <td>
-                @item.Product.Category.Name
+                @item.Product.Category?.Name
             </td>
             <td>
                 @item.Count
@@ -84,3 +84,4 @@
     }
     </tbody>
 </table>
+
