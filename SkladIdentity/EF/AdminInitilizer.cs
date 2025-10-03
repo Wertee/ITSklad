@@ -14,9 +14,18 @@ namespace SkladIdentity.EF
         {
             string adminName = "Admin";
             string password = "Fb4a6a22_a";
+            
+            string localName = "Local";
+            string localPassword = "1234567";
+            
             if (await userManager.FindByNameAsync(adminName) == null)
             {
                 var res = await userManager.CreateAsync(new User() { UserName = adminName }, password);
+            }
+            
+            if (await userManager.FindByNameAsync(localName) == null)
+            {
+                var res = await userManager.CreateAsync(new User() { UserName = localName }, localPassword);
             }
         }
     }
